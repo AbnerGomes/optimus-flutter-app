@@ -45,6 +45,10 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     });
     try {
       final dados = await service.fetchTransacoes();
+
+      // Ordena pela data (mais recentes primeiro)
+      dados.sort((a, b) => b.data.compareTo(a.data));
+
       setState(() {
         transacoes = dados;
         isLoading = false;
@@ -85,6 +89,10 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
       final dentroData = (dataInicial == null || t.data.isAfter(dataInicial!.subtract(Duration(days: 1)))) &&
           (dataFinal == null || t.data.isBefore(dataFinal!.add(Duration(days: 1))));
       final mesmaCategoria = categoriaSelecionada == null || t.categoria == categoriaSelecionada;
+
+      // Ordena por data decrescente
+      listaFiltrada.sort((a, b) => b.data.compareTo(a.data));
+
       return dentroData && mesmaCategoria;
     }).toList();
   }
