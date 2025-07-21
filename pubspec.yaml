@@ -1,0 +1,19 @@
+name: meu_app_financas
+description: Um app de finanças pessoais
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  fl_chart: ^0.71.0
+  flutter:
+    sdk: flutter
+  intl: ^0.20.2
+  http: ^0.13.5   
+  flutter_date_pickers: ^0.4.0
+
+
+flutter:
+  uses-material-design: true
