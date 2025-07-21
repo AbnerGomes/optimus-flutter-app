@@ -4,16 +4,19 @@ import '../models/transacao.dart';
 import '../services/transacao_service.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 
+// Tela de listagem e gerenciamento de transações
 class TransacoesScreen extends StatefulWidget {
   @override
   _TransacoesScreenState createState() => _TransacoesScreenState();
 }
 
 class _TransacoesScreenState extends State<TransacoesScreen> {
+  // Filtros
   DateTime? dataInicial;
   DateTime? dataFinal;
   String? categoriaSelecionada;
 
+  // Lista de categorias disponíveis
   final List<String> categorias = [
     'Alimentação',
     'Entretenimento',
@@ -35,6 +38,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     carregarTransacoes();
   }
 
+  // Carrega todas as transações do serviço
   Future<void> carregarTransacoes() async {
     setState(() {
       isLoading = true;
@@ -53,21 +57,29 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     }
   }
 
+  // Retorna ícone baseado na categoria
   IconData getIconeCategoria(String categoria) {
     switch (categoria) {
       case 'Alimentação':
         return Icons.restaurant;
-      case 'Transporte':
+      case 'Mobilidade':
         return Icons.directions_car;
-      case 'Lazer':
+      case 'Entretenimento':
         return Icons.movie;
       case 'Saúde':
         return Icons.local_hospital;
+      case 'Educação':
+        return Icons.movie;
+      case 'Dívidas':
+        return Icons.money;   
+      case 'Moradia':
+        return Icons.house;            
       default:
         return Icons.category;
     }
   }
 
+  // Filtra as transações conforme data e categoria
   List<Transacao> get transacoesFiltradas {
     return transacoes.where((t) {
       final dentroData = (dataInicial == null || t.data.isAfter(dataInicial!.subtract(Duration(days: 1)))) &&
@@ -77,9 +89,11 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     }).toList();
   }
 
+  // Soma total das transações filtradas
   double get totalPeriodo =>
       transacoesFiltradas.fold(0.0, (soma, item) => soma + item.valor_gasto);
 
+  // Abre o seletor de intervalo de datas
   Future<void> selecionarIntervaloData(BuildContext context) async {
     DateTime hoje = DateTime.now();
     DateTime firstDate = DateTime(2000);
@@ -133,6 +147,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     );
   }
 
+  // Edita uma transação existente
   void _editarTransacao(Transacao transacao) {
     final descricaoController = TextEditingController(text: transacao.gasto);
     final valorController = TextEditingController(text: transacao.valor_gasto.toString());
@@ -213,6 +228,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     );
   }
 
+  // Cria nova transação
   void _novaTransacao() {
     final descricaoController = TextEditingController();
     final valorController = TextEditingController();
@@ -301,22 +317,23 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // HEADER FIXO
-            Container(
-              height: 60,
-              width: double.infinity,
-              color: Color(0xFF0abfa7),
-              alignment: Alignment.center,
-              child: Text(
-                'Transações',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+            // Cabeçalho da tela
+            // Container(
+            //   height: 60,
+            //   width: double.infinity,
+            //   color: Color(0xFF0abfa7),
+            //   alignment: Alignment.center,
+            //   child: Text(
+            //     'Transações',
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 20,
+            //       fontWeight: FontWeight.w600,
+            //     ),
+            //   ),
+            // ),
 
+            // Conteúdo principal da tela
             Expanded(
               child: Center(
                 child: Container(
@@ -324,7 +341,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
                   child: Column(
                     children: [
-                      // filtros
+                      // Filtros (datas e categoria)
                       Card(
                         color: Colors.white,
                         elevation: 2,
@@ -379,6 +396,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
                       ),
 
                       SizedBox(height: 16),
+                      // Lista de transações
                       isLoading
                           ? Expanded(child: Center(child: CircularProgressIndicator()))
                           : Expanded(
@@ -439,6 +457,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
                               ),
                             ),
                       SizedBox(height: 12),
+                      // Total do período
                       Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -455,6 +474,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
         ),
       ),
 
+      // Botão flutuante para adicionar nova transação
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Align(

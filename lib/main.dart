@@ -3,6 +3,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/transacoes_screen.dart';
 import 'screens/despesas_screen.dart';
 import 'screens/receitas_screen.dart';
+import 'widgets/app_header.dart';
 
 //função principal rodando a app chamando a classe principal (widget)
 void main() {
@@ -45,6 +46,13 @@ class _HomePageState extends State<HomePage> {
     ReceitasScreen(),
   ];
 
+  final List<String> _titles = [
+  'Dashboard',
+  'Transações',
+  'Despesas',
+  'Receitas',
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -54,6 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppHeader(title: _titles[_selectedIndex]),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

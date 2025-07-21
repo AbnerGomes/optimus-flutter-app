@@ -15,7 +15,7 @@ class _FiltroPeriodoState extends State<FiltroPeriodo> {
     'Mês Anterior',
   ];
 
-  String? filtroSelecionado;
+  String? filtroSelecionado = 'Mês Atual'; // aqui já inicia selecionado
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _FiltroPeriodoState extends State<FiltroPeriodo> {
                     style: TextStyle(
                       color: selecionado ? Colors.white : Colors.grey[600],
                       fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                 ),

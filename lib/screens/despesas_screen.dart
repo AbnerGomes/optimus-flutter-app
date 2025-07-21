@@ -36,11 +36,11 @@ class DespesasScreen extends StatelessWidget {
     double total = transacoes.fold(0, (sum, item) => sum + item['valor']);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Transações'),
-        centerTitle: true,
-        backgroundColor: Colors.teal,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Transações'),
+      //   centerTitle: true,
+      //   backgroundColor: Colors.teal,
+      // ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -53,10 +53,10 @@ class DespesasScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Histórico de Transações',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                  // Text(
+                  //   'Histórico de Transações',
+                  //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  // ),
                   SizedBox(height: 12),
                   Expanded(
                     child: ListView.separated(

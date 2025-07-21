@@ -2,19 +2,97 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DistribuicaoGastosChart extends StatelessWidget {
+  // Dados do gráfico de pizza com degradê radial aplicado em cada fatia
   final List<PieChartSectionData> sections = [
-    PieChartSectionData(value: 40, title: '', color: Color(0xFFEF5350)), // vermelho suave
-    PieChartSectionData(value: 25, title: '', color: Color(0xFF42A5F5)), // azul suave
-    PieChartSectionData(value: 20, title: '', color: Color(0xFF66BB6A)), // verde suave
-    PieChartSectionData(value: 10, title: '', color: Color(0xFFFFCA28)), // amarelo suave
-    PieChartSectionData(value: 5,  title: '', color: Color(0xFFAB47BC)), // roxo suave
+    PieChartSectionData(
+      value: 40,
+      title: '',
+      gradient: RadialGradient(
+        colors: [
+          Color(0xFFEF5350), // vermelho escuro
+          Color(0xFFFF8A80), // vermelho claro
+        ],
+        center: Alignment.center,
+        radius: 0.85,
+      ),
+    ),
+    PieChartSectionData(
+      value: 25,
+      title: '',
+      gradient: RadialGradient(
+        colors: [
+          Color(0xFF42A5F5), // azul escuro
+          Color(0xFF90CAF9), // azul claro
+        ],
+        center: Alignment.center,
+        radius: 0.85,
+      ),
+    ),
+    PieChartSectionData(
+      value: 20,
+      title: '',
+      gradient: RadialGradient(
+        colors: [
+          Color(0xFF66BB6A), // verde escuro
+          Color(0xFFA5D6A7), // verde claro
+        ],
+        center: Alignment.center,
+        radius: 0.85,
+      ),
+    ),
+    PieChartSectionData(
+      value: 10,
+      title: '',
+      gradient: RadialGradient(
+        colors: [
+          Color(0xFFFFCA28), // amarelo escuro
+          Color(0xFFFFF59D), // amarelo claro
+        ],
+        center: Alignment.center,
+        radius: 0.85,
+      ),
+    ),
+    PieChartSectionData(
+      value: 5,
+      title: '',
+      gradient: RadialGradient(
+        colors: [
+          Color(0xFFAB47BC), // roxo escuro
+          Color(0xFFE1BEE7), // roxo claro
+        ],
+        center: Alignment.center,
+        radius: 0.85,
+      ),
+    ),
   ];
 
+  // Mesmas cores usadas no gráfico, para legenda
   final List<Map<String, dynamic>> legendas = [
-    {'cor': Color(0xFFEF5350), 'texto': 'Moradia'},
-    {'cor': Color(0xFF42A5F5), 'texto': 'Transporte'},
-    {'cor': Color(0xFF66BB6A), 'texto': 'Alimentação'},
-    // outras categorias omitidas para manter a legenda compacta
+    {
+      'gradient': LinearGradient(
+        colors: [Color(0xFFEF5350), Color(0xFFFF8A80)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      'texto': 'Moradia'
+    },
+    {
+      'gradient': LinearGradient(
+        colors: [Color(0xFF42A5F5), Color(0xFF90CAF9)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      'texto': 'Transporte'
+    },
+    {
+      'gradient': LinearGradient(
+        colors: [Color(0xFF66BB6A), Color(0xFFA5D6A7)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      'texto': 'Alimentação'
+    },
+    // Outras categorias omitidas para manter legenda compacta
   ];
 
   @override
@@ -28,7 +106,7 @@ class DistribuicaoGastosChart extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Legendas centralizadas verticalmente
+            // Legendas com degradê nas caixas de cor
             Expanded(
               flex: 2,
               child: Center(
@@ -40,11 +118,12 @@ class DistribuicaoGastosChart extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 6.0),
                       child: Row(
                         children: [
+                          // Caixa com degradê usando BoxDecoration e LinearGradient
                           Container(
                             width: 14,
                             height: 14,
                             decoration: BoxDecoration(
-                              color: item['cor'],
+                              gradient: item['gradient'],  // Aplicando degradê na legenda
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -58,7 +137,7 @@ class DistribuicaoGastosChart extends StatelessWidget {
               ),
             ),
             SizedBox(width: 12),
-            // Gráfico centralizado
+            // Gráfico centralizado com degradê radial em cada fatia
             Expanded(
               flex: 4,
               child: SizedBox(

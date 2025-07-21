@@ -5,6 +5,7 @@ import '../widgets/gastos_mensais_chart.dart';
 import '../widgets/filtro_periodo.dart';
 import '../widgets/distribuicao_gastos_chart.dart';
 import '../widgets/total_gasto_info.dart';
+import '../widgets/resumo_financeiro.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
@@ -14,9 +15,11 @@ class DashboardScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppHeader(),
-          SizedBox(height: 20),
+          //AppHeader(),
+          //SizedBox(height: 20),
           GastosMensaisChart(),
+          SizedBox(height: 20),
+          ResumoFinanceiro(  totalReceitas: 8000, totalDespesas: 5000,),
           SizedBox(height: 20),
           FiltroPeriodo(),
           SizedBox(height: 20),
