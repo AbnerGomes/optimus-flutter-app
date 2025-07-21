@@ -85,16 +85,17 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
 
   // Filtra as transações conforme data e categoria
   List<Transacao> get transacoesFiltradas {
-    return transacoes.where((t) {
-      final dentroData = (dataInicial == null || t.data.isAfter(dataInicial!.subtract(Duration(days: 1)))) &&
-          (dataFinal == null || t.data.isBefore(dataFinal!.add(Duration(days: 1))));
-      final mesmaCategoria = categoriaSelecionada == null || t.categoria == categoriaSelecionada;
+    final listaFiltrada = transacoes.where((t) {
+    final dentroData = (dataInicial == null || t.data.isAfter(dataInicial!.subtract(Duration(days: 1)))) &&
+        (dataFinal == null || t.data.isBefore(dataFinal!.add(Duration(days: 1))));
+    final mesmaCategoria = categoriaSelecionada == null || t.categoria == categoriaSelecionada;
 
-      // Ordena por data decrescente
-      listaFiltrada.sort((a, b) => b.data.compareTo(a.data));
+    return dentroData && mesmaCategoria;
+  }).toList();
 
-      return dentroData && mesmaCategoria;
-    }).toList();
+        // Ordena por data decrescente
+    listaFiltrada.sort((a, b) => b.data.compareTo(a.data));
+    return listaFiltrada;
   }
 
   // Soma total das transações filtradas
