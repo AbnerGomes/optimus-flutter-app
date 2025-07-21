@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FiltroPeriodo extends StatefulWidget {
+
+  final Function(String) onFiltroSelecionado;
+
+  FiltroPeriodo({required this.onFiltroSelecionado});
+
   @override
   _FiltroPeriodoState createState() => _FiltroPeriodoState();
 }
@@ -36,7 +41,10 @@ class _FiltroPeriodoState extends State<FiltroPeriodo> {
                 onTap: () {
                   setState(() {
                     filtroSelecionado = texto;
+                    print(texto);
                   });
+                  widget.onFiltroSelecionado(texto); // <- Envia o filtro para o pai
+                  print(texto);
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 250),

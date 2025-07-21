@@ -41,6 +41,7 @@ class _DashboardComFiltroState extends State<DashboardComFiltro> {
           onFiltroSelecionado: (filtro) {
             setState(() {
               filtroAtual = filtro;
+              print(filtro);
             });
           },
         ),

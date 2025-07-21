@@ -16,4 +16,14 @@ Future<List<Transacao>> fetchTransacoes() async {
 }
 
 
+// Future<List<Transacao>> fetchTransacoes() async {
+//   final response = await http.get(Uri.parse(apiUrl));
+//   if (response.statusCode == 200) {
+//     final List<dynamic> jsonData = json.decode(utf8.decode(response.bodyBytes));
+//     return jsonData.map((json) => Transacao.fromJson(json)).toList();
+//   } else {
+//     throw Exception('Erro ao carregar transações');
+//   }
+// }
+
 }
