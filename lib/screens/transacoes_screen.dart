@@ -75,9 +75,9 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
       case 'Educação':
         return Icons.movie;
       case 'Dívidas':
-        return Icons.money;   
+        return Icons.money;
       case 'Moradia':
-        return Icons.house;            
+        return Icons.house;
       default:
         return Icons.category;
     }
@@ -86,14 +86,14 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
   // Filtra as transações conforme data e categoria
   List<Transacao> get transacoesFiltradas {
     final listaFiltrada = transacoes.where((t) {
-    final dentroData = (dataInicial == null || t.data.isAfter(dataInicial!.subtract(Duration(days: 1)))) &&
-        (dataFinal == null || t.data.isBefore(dataFinal!.add(Duration(days: 1))));
-    final mesmaCategoria = categoriaSelecionada == null || t.categoria == categoriaSelecionada;
+      final dentroData = (dataInicial == null || t.data.isAfter(dataInicial!.subtract(Duration(days: 1)))) &&
+          (dataFinal == null || t.data.isBefore(dataFinal!.add(Duration(days: 1))));
+      final mesmaCategoria = categoriaSelecionada == null || t.categoria == categoriaSelecionada;
 
-    return dentroData && mesmaCategoria;
-  }).toList();
+      return dentroData && mesmaCategoria;
+    }).toList();
 
-        // Ordena por data decrescente
+    // Ordena por data decrescente
     listaFiltrada.sort((a, b) => b.data.compareTo(a.data));
     return listaFiltrada;
   }
@@ -219,13 +219,18 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
           actions: [
             TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   transacao.gasto = descricaoController.text;
                   transacao.valor_gasto = double.tryParse(valorController.text) ?? 0.0;
                   transacao.categoria = categoriaAtual;
                   transacao.data = dataSelecionada;
                 });
+
+                // Salva no banco
+                await service.editTransacoes(transacao);
+                await carregarTransacoes();
+
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Transação atualizada')));
               },
@@ -298,16 +303,24 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
           actions: [
             TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                final nova = Transacao(
+                  gasto: descricaoController.text,
+                  valor_gasto: double.tryParse(valorController.text) ?? 0.0,
+                  categoria: categoriaAtual,
+                  data: dataSelecionada,
+                );
+
                 setState(() {
-                  transacoes.add(Transacao(
-                    gasto: descricaoController.text,
-                    valor_gasto: double.tryParse(valorController.text) ?? 0.0,
-                    categoria: categoriaAtual,
-                    data: dataSelecionada,
-                  ));
+                  transacoes.add(nova);
                 });
+
+                // Salva no banco
+                await service.saveTransacoes(nova);
+                await carregarTransacoes();
+
                 Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Transação adicionada')));
               },
               child: Text('Adicionar'),
             ),
@@ -326,23 +339,6 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Cabeçalho da tela
-            // Container(
-            //   height: 60,
-            //   width: double.infinity,
-            //   color: Color(0xFF0abfa7),
-            //   alignment: Alignment.center,
-            //   child: Text(
-            //     'Transações',
-            //     style: TextStyle(
-            //       color: Colors.white,
-            //       fontSize: 20,
-            //       fontWeight: FontWeight.w600,
-            //     ),
-            //   ),
-            // ),
-
-            // Conteúdo principal da tela
             Expanded(
               child: Center(
                 child: Container(

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppHeader extends StatefulWidget implements PreferredSizeWidget {
-  
   final String title;
+  final VoidCallback? onLogout; // 👈 adicionamos esta callback
 
-  AppHeader({required this.title});
+  AppHeader({required this.title, this.onLogout});
 
   @override
   State<AppHeader> createState() => _AppHeaderState();
 
-  // Aqui indicamos a altura padrão da appbar
   @override
   Size get preferredSize => Size.fromHeight(56);
 }
@@ -28,29 +27,29 @@ class _AppHeaderState extends State<AppHeader> {
         height: 56,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: Color(0xFF0abfa7),
+          color: const Color(0xFF0abfa7),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Conteúdo à esquerda
-            Align(
+            // Ícone à esquerda
+            const Align(
               alignment: Alignment.centerLeft,
               child: Icon(Icons.attach_money, size: 28, color: Colors.white),
             ),
 
-            // Título centralizado
+            // Título central
             Center(
               child: Text(
                 widget.title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -60,22 +59,23 @@ class _AppHeaderState extends State<AppHeader> {
               ),
             ),
 
-            // Conteúdo à direita
+            // À direita
             Align(
               alignment: Alignment.centerRight,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButton<String>(
-                    dropdownColor: Color(0xFF0abfa7),
+                    dropdownColor: const Color(0xFF0abfa7),
                     value: modoSelecionado,
-                    style: TextStyle(color: Colors.white),
-                    underline: SizedBox(),
+                    style: const TextStyle(color: Colors.white),
+                    underline: const SizedBox(),
                     iconEnabledColor: Colors.white,
                     items: ['Individual', 'Casal']
                         .map((modo) => DropdownMenuItem(
                               value: modo,
-                              child: Text(modo, style: TextStyle(color: Colors.white)),
+                              child: Text(modo,
+                                  style: const TextStyle(color: Colors.white)),
                             ))
                         .toList(),
                     onChanged: (value) {
@@ -84,10 +84,22 @@ class _AppHeaderState extends State<AppHeader> {
                       });
                     },
                   ),
-                  SizedBox(width: 10),
-                  CircleAvatar(
-                    backgroundColor: Colors.grey[300],
-                    child: Icon(Icons.person, color: Colors.black87),
+                  const SizedBox(width: 10),
+
+                  // Avatar e botão de sair
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: Colors.black87),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.logout, color: Colors.white),
+                        tooltip: 'Sair',
+                        onPressed: widget.onLogout, // 👈 chama o logout
+                      ),
+                    ],
                   ),
                 ],
               ),

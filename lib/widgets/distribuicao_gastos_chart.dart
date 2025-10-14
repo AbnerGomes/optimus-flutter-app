@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../services/transacao_service.dart'; // ajuste o caminho se necessário
 import '../models/transacao.dart'; // ajuste conforme sua estrutura
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DistribuicaoGastosChart extends StatefulWidget {
 
@@ -49,9 +50,11 @@ class _DistribuicaoGastosChartState extends State<DistribuicaoGastosChart> {
 
 
   Future<void> carregarDados() async {
-    print("DEU BOM" );
+    final prefs = await SharedPreferences.getInstance();
+    final usuario = prefs.getString('usuarioLogado') ?? 'desconhecido';
+    print("Usuário logado: $usuario");
 
-    final transacoes = await service.fetchTransacoes(); // ajuste para seu método real
+    final transacoes = await service.fetchTransacoes(usuario: usuario);
 
     final agora = DateTime.now();
 

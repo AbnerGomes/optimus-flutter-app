@@ -1,33 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/transacoes_screen.dart';
 import 'screens/despesas_screen.dart';
 import 'screens/receitas_screen.dart';
 import 'widgets/app_header.dart';
 
-//função principal rodando a app chamando a classe principal (widget)
 void main() {
   runApp(FinancasApp());
 }
 
-//classe do app em si
 class FinancasApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //title: 'App de Finanças',
       theme: ThemeData(
-         brightness: Brightness.light,
+        brightness: Brightness.light,
         primarySwatch: Colors.indigo,
-        scaffoldBackgroundColor: Color(0xFFF7F9FC),
+        scaffoldBackgroundColor: const Color(0xFFF7F9FC),
         fontFamily: 'Roboto',
-        textTheme: TextTheme(
-            bodyMedium: TextStyle(fontSize: 16),
       ),
-      ),
-      home: HomePage(),
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const AuthCheck(),
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => HomePage(),
+      },
     );
+  }
+}
+
+// Verifica se há usuário logado
+class AuthCheck extends StatefulWidget {
+  const AuthCheck({Key? key}) : super(key: key);
+
+  @override
+  _AuthCheckState createState() => _AuthCheckState();
+}
+
+class _AuthCheckState extends State<AuthCheck> {
+  bool _carregando = true;
+  bool _logado = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _verificarLogin();
+  }
+
+  Future<void> _verificarLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final usuario = prefs.getString('usuarioLogado');
+    setState(() {
+      _logado = usuario != null;
+      _carregando = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_carregando) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    return _logado ? HomePage() : const LoginScreen();
   }
 }
 
@@ -47,10 +86,10 @@ class _HomePageState extends State<HomePage> {
   ];
 
   final List<String> _titles = [
-  'Dashboard',
-  'Transações',
-  'Despesas',
-  'Receitas',
+    'Dashboard',
+    'Transações',
+    'Despesas',
+    'Receitas',
   ];
 
   void _onItemTapped(int index) {
@@ -59,34 +98,42 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('usuarioLogado');
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppHeader(title: _titles[_selectedIndex]),
+      appBar: AppHeader(
+        title: _titles[_selectedIndex],
+        onLogout: _logout,
+      ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         backgroundColor: const Color(0xFF0abfa7),
         elevation: 10,
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart_outline, color: Colors.white),
             label: 'Dashboard',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.list_alt, color: Colors.white),
             label: 'Transações',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.money_off_csred_outlined, color: Colors.white),
             label: 'Despesas',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.attach_money_outlined, color: Colors.white),
             label: 'Receitas',
           ),
@@ -95,5 +142,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
