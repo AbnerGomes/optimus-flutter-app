@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/transacao.dart';
 
 class TransacaoService {
-  final String apiUrl = 'https://optimus-flutter-app.onrender.com/transacoes'; // coloque sua URL aqui
+  final String apiUrl = 'https://optimus-flutter-app.onrender.com/transacoes'; // 
   //final String apiUrl = 'http://0.0.0.0:8000/transacoes';
 
   Future<List<Transacao>> fetchTransacoes({String? usuario}) async {
