@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '../models/transacao.dart';
 import '../services/transacao_service.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 // Tela de listagem e gerenciamento de transações
 class TransacoesScreen extends StatefulWidget {
@@ -31,6 +33,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
   List<Transacao> transacoes = [];
   bool isLoading = true;
   final TransacaoService service = TransacaoService();
+  var prefs = null;
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     });
     try {
       final dados = await service.fetchTransacoes();
+      prefs = await SharedPreferences.getInstance();
 
       // Ordena pela data (mais recentes primeiro)
       dados.sort((a, b) => b.data.compareTo(a.data));
@@ -248,6 +252,8 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
     final valorController = TextEditingController();
     String categoriaAtual = categorias.first;
     DateTime dataSelecionada = DateTime.now();
+    
+    final usuario = prefs.getString('usuarioLogado') ?? 'desconhecido';
 
     showDialog(
       context: context,
@@ -309,6 +315,7 @@ class _TransacoesScreenState extends State<TransacoesScreen> {
                   valor_gasto: double.tryParse(valorController.text) ?? 0.0,
                   categoria: categoriaAtual,
                   data: dataSelecionada,
+                  usuario: usuario,
                 );
 
                 setState(() {
